@@ -17,8 +17,16 @@ export class GameScene extends Phaser.Scene {
     private player: Phaser.Physics.Arcade.Sprite;
     private platforms: Phaser.Physics.Arcade.StaticGroup;
     private stars: Phaser.Physics.Arcade.Group;
+    private bombs: Phaser.Physics.Arcade.Group;
+
+    private score = 0;
+    private scoreText: Phaser.GameObjects.Text;
+    private gameOver: boolean;
 
     public create() {
+
+
+
         this.square = this.add.rectangle(400, 400, 100, 100, 0xAAAAAA) as any;
         this.physics.add.existing(this.square);
 
@@ -62,12 +70,54 @@ export class GameScene extends Phaser.Scene {
             repeat: -1
         });
 
-
         this.stars = this.physics.add.group({
             key: 'star',
             repeat: 11,
             setXY: { x: 12, y: 0, stepX: 70 }
         });
+
+        this.physics.add.collider(this.stars, this.platforms);
+        this.physics.add.overlap(this.player, this.stars, collectStar, null, this);
+
+        function collectStar(player, star) {
+            star.disableBody(true, true);
+            this.score += 10;
+            this.scoreText.setText('Score: ' + this.score);
+
+            if (this.stars.countActive(true) === 0) {
+                this.stars.children.iterate(function (child) {
+
+                    child.enableBody(true, child.x, 0, true, true);
+
+                });
+
+                var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
+
+                var bomb = this.bombs.create(x, 16, 'bomb');
+                bomb.setBounce(1);
+                bomb.setCollideWorldBounds(true);
+                bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+
+            }
+        }
+
+        this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+
+        this.bombs = this.physics.add.group();
+
+        this.physics.add.collider(this.bombs, this.platforms);
+
+        this.physics.add.collider(this.player, this.bombs, hitBomb, null, this);
+
+        function hitBomb(player, bomb) {
+            this.physics.pause();
+
+            player.setTint(0xff0000);
+
+            player.anims.play('turn');
+
+            this.gameOver = true;
+        }
 
     }
 
