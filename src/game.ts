@@ -1,14 +1,13 @@
 import * as Phaser from 'phaser';
-import {Scene1} from './scene1';
+import { Scene1 } from './scene1';
+import { Menu } from './menu'
 
-const gameConfig: Phaser.Types.Core.GameConfig = {
+export const config: Phaser.Types.Core.GameConfig = {
     title: 'Flappy Bozo',
-    scene: Scene1,
+    scene: [Menu, Scene1],
     type: Phaser.AUTO,
 
     scale: {
-        // width: window.innerWidth,
-        // height: window.innerHeight,
         width: 800,
         height: 600,
     },
@@ -21,8 +20,7 @@ const gameConfig: Phaser.Types.Core.GameConfig = {
         },
     },
 
-    parent: 'game',
     backgroundColor: '#000000',
 };
 
-export const game = new Phaser.Game(gameConfig);
+export const game = new Phaser.Game(config);
