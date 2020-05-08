@@ -6,7 +6,7 @@ const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
     key: 'Game'
 };
 
-export class GameScene extends Phaser.Scene {
+export class Scene1 extends Phaser.Scene {
     private square: Phaser.GameObjects.Rectangle & { body: Phaser.Physics.Arcade.Body };
 
     constructor() {
@@ -24,12 +24,6 @@ export class GameScene extends Phaser.Scene {
     private gameOver: boolean;
 
     public create() {
-
-
-
-        this.square = this.add.rectangle(400, 400, 100, 100, 0xAAAAAA) as any;
-        this.physics.add.existing(this.square);
-
         this.add.image(400, 300, 'sky');
 
         this.platforms = this.physics.add.staticGroup();
@@ -39,9 +33,6 @@ export class GameScene extends Phaser.Scene {
         this.platforms.create(600, 400, 'ground');
         this.platforms.create(50, 250, 'ground');
         this.platforms.create(750, 220, 'ground');
-
-
-
 
         this.player = this.physics.add.sprite(100, 450, 'dude');
 
@@ -159,28 +150,3 @@ export class GameScene extends Phaser.Scene {
 
 
 
-const gameConfig: Phaser.Types.Core.GameConfig = {
-    title: 'Flappy Bozo',
-    scene: GameScene,
-    type: Phaser.AUTO,
-
-    scale: {
-        // width: window.innerWidth,
-        // height: window.innerHeight,
-        width: 800,
-        height: 600,
-    },
-
-    physics: {
-        default: 'arcade',
-        arcade: {
-            gravity: { y: 300 },
-            debug: false,
-        },
-    },
-
-    parent: 'game',
-    backgroundColor: '#000000',
-};
-
-export const game = new Phaser.Game(gameConfig);
