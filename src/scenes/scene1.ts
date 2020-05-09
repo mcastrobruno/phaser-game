@@ -1,6 +1,9 @@
 import * as Phaser from 'phaser';
-import { config } from '../game';
 import { GamePlayer } from '../objects/player';
+import { Platform } from '../objects/platform';
+import { Stars } from '../objects/stars';
+import * as PowerUp from '../objects/powerUp';
+import { ScoreManager } from '../coordinator/scoreManager';
 
 const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
     active: false,
@@ -15,55 +18,70 @@ const gameConfig = {
 }
 
 export class Scene1 extends Phaser.Scene {
-    private square: Phaser.GameObjects.Rectangle & { body: Phaser.Physics.Arcade.Body };
 
     constructor() {
         super(sceneConfig);
     }
 
-
-    private player: Phaser.Physics.Arcade.Sprite;
+    private player: GamePlayer;
     private platforms: Phaser.Physics.Arcade.StaticGroup;
     private stars: Phaser.Physics.Arcade.Group;
     private bombs: Phaser.Physics.Arcade.Group;
+    private powerups: Phaser.Physics.Arcade.Group;
+    private scoreManager: ScoreManager;
 
-    private score = 0;
-    private scoreText: Phaser.GameObjects.Text;
-    private gameOver: boolean;
 
     public create() {
-        this.add.image(400, 300, 'sky');
 
-        this.buildPlatforms();
-
+        this.createScenario();
         this.player = new GamePlayer(this);
+        this.stars = new Stars(this.physics.world, this);
+        this.bombs = this.physics.add.group();
+        this.powerups = this.physics.add.group();
+        this.scoreManager = new ScoreManager(this, this.player, this.stars, this.powerups);
 
+        this.SetCollisions();
+        this.addEnemy();
+        this.scoreManager.Start();
+    }
+
+
+
+    private createScenario() {
+        this.add.image(400, 300, 'sky');
+        this.platforms = new Platform(this.physics.world, this);
+    }
+
+    private SetCollisions() {
+        this.physics.add.collider(this.powerups, this.platforms);
         this.physics.add.collider(this.player, this.platforms);
+        this.physics.add.collider(this.stars, this.platforms);
+        this.physics.add.collider(this.bombs, this.platforms);
+        this.physics.add.collider(this.player, this.bombs, hitBomb, null, this);
 
-        // this.buildAnimation();
+        function hitBomb(player: GamePlayer, bomb: Phaser.Physics.Arcade.Sprite) {
 
-        // this.buildStars(collectStar);
+            console.log(bomb);
+            if (player.activePowerUp) {
 
-        function collectStar(player, star) {
-            star.disableBody(true, true);
-            this.score += 10;
-            this.scoreText.setText('Score: ' + this.score);
-
-            if (this.stars.countActive(true) === 0) {
-                this.stars.children.iterate(function (child) {
-
-                    child.enableBody(true, child.x, 0, true, true);
-
-                });
-
-                this.addEnemy();
+                if (player.activePowerUp instanceof PowerUp.MaskPowerUp) {
+                    player.RemovePowerUp();
+                    return;
+                }
+                else if (player.activePowerUp instanceof PowerUp.HandSanitizerPowerUp) {
+                    bomb.disableBody(true, true);
+                    player.RemovePowerUp();
+                    return;
+                }
             }
+
+            this.physics.pause();
+            player.setTint(0xff0000);
+            player.anims.play('turn');
+            this.gameOver = true;
+
+            // this.scene.start('GameOver', this.score);
         }
-
-        this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
-
-        // this.buildBombs();
-        // this.addEnemy();
     }
 
     private addEnemy() {
@@ -75,56 +93,6 @@ export class Scene1 extends Phaser.Scene {
         bomb.setBounce(1);
         bomb.setCollideWorldBounds(true);
         bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
-    }
-
-    private buildBombs() {
-        this.bombs = this.physics.add.group();
-        this.physics.add.collider(this.bombs, this.platforms);
-        this.physics.add.collider(this.player, this.bombs, hitBomb, null, this);
-        function hitBomb(player, bomb) {
-            this.physics.pause();
-            player.setTint(0xff0000);
-            player.anims.play('turn');
-            this.gameOver = true;
-
-            this.scene.start('GameOver', this.score);
-        }
-    }
-
-    private buildStars(collectStar: (player: any, star: any) => void) {
-        this.stars = this.physics.add.group({
-            key: ['facemask', 'handsanitizer'],
-            repeat: gameConfig.numberOfAids - 1,
-            setXY: { x: 50, y: 0, stepX: 70 }
-        });
-        this.physics.add.collider(this.stars, this.platforms);
-        this.physics.add.overlap(this.player, this.stars, collectStar, null, this);
-    }
-
-  
-
-  
-    private buildPlatforms() {
-        this.platforms = this.physics.add.staticGroup();
-        this.platforms.create(400, 568, 'ground').setScale(2).refreshBody();
-        this.platforms.create(600, 400, 'ground');
-        this.platforms.create(50, 250, 'ground');
-        this.platforms.create(750, 220, 'ground');
-    }
-
-    public preload() {
-        this.load.image('sky', 'assets/images/sky.png');
-        this.load.image('ground', 'assets/images/platform.png');
-        this.load.image('star', 'assets/images/star.png');
-        this.load.image('bomb', 'assets/images/bomb.png');
-        this.load.image('covid', 'assets/images/covid.png');
-        this.load.image('facemask', 'assets/images/facemask.png');
-        this.load.image('handsanitizer', 'assets/images/hand_sanitizer.png');
-
-        this.load.spritesheet('dude',
-            'assets/images/dude.png',
-            { frameWidth: 32, frameHeight: 48 }
-        );
     }
 
     public update() {

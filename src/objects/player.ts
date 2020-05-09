@@ -1,7 +1,14 @@
 import * as Phaser from 'phaser';
+import { PowerUp } from '../objects/powerUp';
 
 
 export class GamePlayer extends Phaser.Physics.Arcade.Sprite {
+
+    public activePowerUp: PowerUp;
+    public handPowerUpBuffer: number = 0;
+    public maskPowerUpBuffer: number = 0;
+
+    private countBuffer: boolean = false;
 
     constructor(scene: Phaser.Scene) {
         super(scene, 100, 450, 'dude')
@@ -33,4 +40,51 @@ export class GamePlayer extends Phaser.Physics.Arcade.Sprite {
             repeat: -1
         });
     }
+
+    public CollectStar() {
+        this.handPowerUpBuffer++;
+        this.maskPowerUpBuffer++;
+    }
+
+    public AddPowerUp(powerup: PowerUp) {
+        this.activePowerUp = powerup;
+        this.setTint(0xFFEF04);
+
+        var tween = this.scene.tweens.add({
+            targets: this,
+            ease: 'Power1',
+            duration: 200,
+            alpha: 0.3,
+            repeat: 10,
+            yoyo: true,
+            onComplete: function () {
+                this.player.activePowerUp = null;
+                this.player.clearTint();
+                this.maskPowerUpBuffer = 0;
+                this.handPowerUpBuffer = 0;
+            },
+            callbackScope: this.scene
+        });
+
+    }
+
+    public RemovePowerUp() {
+
+        this.alpha = 0.2;
+        this.clearTint();
+
+        var tween = this.scene.tweens.add({
+            targets: this,
+            ease: 'Power1',
+            duration: 1500,
+            alpha: 1,
+            repeat: 0,
+            onComplete: function () {
+                this.player.hasPowerUp = false;
+            },
+            callbackScope: this.scene
+        });
+
+    }
+
 }

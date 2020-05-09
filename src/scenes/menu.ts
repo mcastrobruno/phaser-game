@@ -19,9 +19,24 @@ export class Menu extends Phaser.Scene {
         text.on('pointerup', function () {
             this.scene.start("Game");
         }, this);
+
+
+        this.scene.start("Game");
     }
 
-    public update() {
+    public preload() {
+        this.load.image('sky', 'assets/images/sky.png');
+        this.load.image('ground', 'assets/images/platform.png');
+        this.load.image('star', 'assets/images/star.png');
+        this.load.image('bomb', 'assets/images/bomb.png');
+        this.load.image('covid', 'assets/images/covid.png');
+        this.load.image('facemask', 'assets/images/facemask.png');
+        this.load.image('handsanitizer', 'assets/images/hand_sanitizer.png');
+
+        this.load.spritesheet('dude',
+            'assets/images/dude.png',
+            { frameWidth: 32, frameHeight: 48 }
+        );
     }
 }
 

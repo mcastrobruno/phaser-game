@@ -5,9 +5,9 @@ import { GameOver } from './scenes/endGame'
 
 export const config: Phaser.Types.Core.GameConfig = {
     title: 'Flappy Bozo',
-    scene: [Scene1, GameOver, Menu],
+    scene: [Menu, Scene1, GameOver],
     type: Phaser.AUTO,
-    
+
 
     scale: {
         width: 800,
