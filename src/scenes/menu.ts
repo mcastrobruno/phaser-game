@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser';
-import { config } from './game';
+import { config } from '../game';
 
 const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
     active: false,

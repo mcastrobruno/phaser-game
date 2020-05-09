@@ -1,10 +1,11 @@
 import * as Phaser from 'phaser';
-import { Scene1 } from './scene1';
-import { Menu } from './menu'
+import { Scene1 } from './scenes/scene1';
+import { Menu } from './scenes/menu'
+import { GameOver } from './scenes/endGame'
 
 export const config: Phaser.Types.Core.GameConfig = {
     title: 'Flappy Bozo',
-    scene: [Menu, Scene1],
+    scene: [Scene1, GameOver, Menu],
     type: Phaser.AUTO,
 
     scale: {
