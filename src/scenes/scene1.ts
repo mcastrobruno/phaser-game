@@ -1,10 +1,16 @@
 import * as Phaser from 'phaser';
+import { config } from '../game';
 
 const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
     active: false,
     visible: false,
     key: 'Game'
 };
+
+const gameConfig = {
+    playerXSpeed: 160,
+    playerYSpeed: 330
+}
 
 export class Scene1 extends Phaser.Scene {
     private square: Phaser.GameObjects.Rectangle & { body: Phaser.Physics.Arcade.Body };
@@ -137,12 +143,12 @@ export class Scene1 extends Phaser.Scene {
         const cursorKeys = this.input.keyboard.createCursorKeys();
 
         if (cursorKeys.left.isDown) {
-            this.player.setVelocityX(-160);
+            this.player.setVelocityX(- gameConfig.playerXSpeed);
 
             this.player.anims.play('left', true);
         }
         else if (cursorKeys.right.isDown) {
-            this.player.setVelocityX(160);
+            this.player.setVelocityX(gameConfig.playerXSpeed);
 
             this.player.anims.play('right', true);
         }
@@ -153,7 +159,7 @@ export class Scene1 extends Phaser.Scene {
         }
 
         if (cursorKeys.up.isDown && this.player.body.touching.down) {
-            this.player.setVelocityY(-330);
+            this.player.setVelocityY(-gameConfig.playerYSpeed);
         }
     }
 }

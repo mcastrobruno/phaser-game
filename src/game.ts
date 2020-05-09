@@ -7,6 +7,7 @@ export const config: Phaser.Types.Core.GameConfig = {
     title: 'Flappy Bozo',
     scene: [Scene1, GameOver, Menu],
     type: Phaser.AUTO,
+    
 
     scale: {
         width: 800,
