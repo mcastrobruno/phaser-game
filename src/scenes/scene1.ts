@@ -1,5 +1,6 @@
 import * as Phaser from 'phaser';
 import { config } from '../game';
+import { GamePlayer } from '../objects/player';
 
 const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
     active: false,
@@ -9,7 +10,8 @@ const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
 
 const gameConfig = {
     playerXSpeed: 160,
-    playerYSpeed: 330
+    playerYSpeed: 330,
+    numberOfAids: 5
 }
 
 export class Scene1 extends Phaser.Scene {
@@ -34,13 +36,13 @@ export class Scene1 extends Phaser.Scene {
 
         this.buildPlatforms();
 
-        this.buildPlayer();
+        this.player = new GamePlayer(this);
 
         this.physics.add.collider(this.player, this.platforms);
 
-        this.buildAnimation();
+        // this.buildAnimation();
 
-        this.buildStars(collectStar);
+        // this.buildStars(collectStar);
 
         function collectStar(player, star) {
             star.disableBody(true, true);
@@ -54,20 +56,25 @@ export class Scene1 extends Phaser.Scene {
 
                 });
 
-                var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
-
-                var bomb = this.bombs.create(x, 16, 'bomb');
-                bomb.setBounce(1);
-                bomb.setCollideWorldBounds(true);
-                bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
-
+                this.addEnemy();
             }
         }
 
         this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
 
-        this.buildBombs();
+        // this.buildBombs();
+        // this.addEnemy();
+    }
 
+    private addEnemy() {
+        let x: number = Phaser.Math.Between(400, 800);
+        if (this.player != null)
+            x = (this.player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
+
+        var bomb = this.bombs.create(x, 16, 'covid');
+        bomb.setBounce(1);
+        bomb.setCollideWorldBounds(true);
+        bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
     }
 
     private buildBombs() {
@@ -86,40 +93,17 @@ export class Scene1 extends Phaser.Scene {
 
     private buildStars(collectStar: (player: any, star: any) => void) {
         this.stars = this.physics.add.group({
-            key: 'star',
-            repeat: 11,
-            setXY: { x: 12, y: 0, stepX: 70 }
+            key: ['facemask', 'handsanitizer'],
+            repeat: gameConfig.numberOfAids - 1,
+            setXY: { x: 50, y: 0, stepX: 70 }
         });
         this.physics.add.collider(this.stars, this.platforms);
         this.physics.add.overlap(this.player, this.stars, collectStar, null, this);
     }
 
-    private buildAnimation() {
-        this.anims.create({
-            key: 'left',
-            frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
-            frameRate: 10,
-            repeat: -1
-        });
-        this.anims.create({
-            key: 'turn',
-            frames: [{ key: 'dude', frame: 4 }],
-            frameRate: 20
-        });
-        this.anims.create({
-            key: 'right',
-            frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
-            frameRate: 10,
-            repeat: -1
-        });
-    }
+  
 
-    private buildPlayer() {
-        this.player = this.physics.add.sprite(100, 450, 'dude');
-        this.player.setBounce(0.2);
-        this.player.setCollideWorldBounds(true);
-    }
-
+  
     private buildPlatforms() {
         this.platforms = this.physics.add.staticGroup();
         this.platforms.create(400, 568, 'ground').setScale(2).refreshBody();
@@ -133,6 +117,10 @@ export class Scene1 extends Phaser.Scene {
         this.load.image('ground', 'assets/images/platform.png');
         this.load.image('star', 'assets/images/star.png');
         this.load.image('bomb', 'assets/images/bomb.png');
+        this.load.image('covid', 'assets/images/covid.png');
+        this.load.image('facemask', 'assets/images/facemask.png');
+        this.load.image('handsanitizer', 'assets/images/hand_sanitizer.png');
+
         this.load.spritesheet('dude',
             'assets/images/dude.png',
             { frameWidth: 32, frameHeight: 48 }
