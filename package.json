@@ -2,7 +2,7 @@
   "name": "phaser",
   "version": "1.0.0",
   "description": "A project for phaser learning",
-  "main": "main.js",
+  "main": "game.js",
   "repository": "https://github.com/mcastrobruno/phaser-game",
   "author": "Bruno Castro",
   "license": "MIT",

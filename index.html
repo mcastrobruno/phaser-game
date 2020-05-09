@@ -1,25 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>Flappy Bozo</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <meta name="HandheldFriendly" content="True">
-    <meta name="MobileOptimized" content="320">
-    <meta http-equiv="cleartype" content="on">
-    <style>
-      html,
-      body,
-      canvas {
-        margin: 0 !important;
-        padding: 0 !important;
-        overflow: hidden !important;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="content"></div>
-    <script src="vendors.app.bundle.js"></script>
-    <script src="app.bundle.js"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Flappy Bozo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta http-equiv="cleartype" content="on">
+  <style>
+    html,
+    body,
+    canvas {
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+    }
+
+    @font-face {
+      font-family: test;
+      src: url('assets/fonts/Championship.ttf');
+      font-weight: 400;
+      font-weight: normal;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="content"></div>
+  <div style="font-family:test; position:absolute; left:-1000px; visibility:hidden;">.</div>
+  <script src="vendors.app.bundle.js"></script>
+  <script src="app.bundle.js"></script>
+</body>
+
 </html>
