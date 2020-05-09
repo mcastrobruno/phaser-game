@@ -4,7 +4,7 @@ import { Menu } from './scenes/menu'
 import { GameOver } from './scenes/endGame'
 
 export const config: Phaser.Types.Core.GameConfig = {
-    title: 'Flappy Bozo',
+    title: 'Covid Fight',
     scene: [Menu, Scene1, GameOver],
     type: Phaser.AUTO,
 
