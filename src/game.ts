@@ -39,12 +39,11 @@ var emitter = EventDispatcher.getInstance();
 
 window.addEventListener('orientationchange', (orientation) => {
 
+    alert('Height: ' + window.innerHeight + ' Width:' + window.innerWidth);
 
     if (window.innerHeight < window.innerWidth) {
         document.getElementById("turn").style.display = "block";
         emitter.emit(EventType.OrientationChanged, 'portrait');
-
-        document.body.requestFullscreen();
     }
     else {
         document.getElementById("turn").style.display = "none";

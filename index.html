@@ -48,20 +48,12 @@
 </head>
 
 <body>
-  <button id="goFS">Go fullscreen</button>
+ 
   <div id="content"></div>
   <div style="font-family:test; position:absolute; left:-1000px; visibility:hidden;">.</div>
   <script src="vendors.app.bundle.js"></script>
   <script src="app.bundle.js"></script>
 
-
-  <script>
-    var goFS = document.getElementById("goFS");
-    goFS.addEventListener("click", function () {
-      document.body.requestFullscreen();
-    }, false);
-  </script>
-  
   <div id="turn"></div>
 </body>
 

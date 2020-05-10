@@ -56,7 +56,6 @@ export class Scene1 extends Phaser.Scene {
         this.eventEmitter.on(EventType.OrientationChanged, (data: any) => {
             if (data == "portrait") {
                 this.scene.pause();
-                this.scene.launch('FullScreen');
             }
 
             else {
