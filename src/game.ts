@@ -31,3 +31,15 @@ export const config: Phaser.Types.Core.GameConfig = {
 
 export const game = new Phaser.Game(config);
 
+
+window.addEventListener('orientationchange', (orientation) => {
+
+    console.log('Inner Width' + window.innerWidth);
+    console.log('Inner Height' + window.innerHeight);
+
+    if (window.innerHeight < window.innerWidth)
+        document.getElementById("turn").style.display = "block";
+    else
+        document.getElementById("turn").style.display = "none";
+});
+
