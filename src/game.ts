@@ -39,7 +39,7 @@ var emitter = EventDispatcher.getInstance();
 
 window.addEventListener('orientationchange', (orientation) => {
 
-    alert('Height: ' + window.innerHeight + ' Width:' + window.innerWidth);
+    // alert('Height: ' + window.innerHeight + ' Width:' + window.innerWidth);
 
     if (window.innerHeight < window.innerWidth) {
         document.getElementById("turn").style.display = "block";
