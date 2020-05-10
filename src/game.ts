@@ -4,10 +4,11 @@ import { Menu } from './scenes/menu'
 import { GameOver } from './scenes/endGame'
 import { EventDispatcher } from './events/eventDispatcher';
 import { EventType } from './events/eventTypes';
+import { FullScreen } from './scenes/fullScreen';
 
 export const config: Phaser.Types.Core.GameConfig = {
     title: 'Covid Fight',
-    scene: [Menu, Scene1, GameOver],
+    scene: [Menu, Scene1, GameOver, FullScreen],
     type: Phaser.AUTO,
 
 
