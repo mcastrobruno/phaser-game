@@ -34,6 +34,8 @@ export class Scene1 extends Phaser.Scene {
     public create() {
 
         this.checkOrientation(this.scale.orientation);
+
+
         this.createScenario();
         this.player = new GamePlayer(this);
         this.stars = new Stars(this.physics.world, this);
@@ -53,7 +55,7 @@ export class Scene1 extends Phaser.Scene {
     }
 
     private checkOrientation(orientation) {
-        console.log(orientation);
+        alert(orientation);
         if (orientation == 'portrait-primary' || orientation == 'portrait') {
             document.getElementById("turn").style.display = "block";
         }
