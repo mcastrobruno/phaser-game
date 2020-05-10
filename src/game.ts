@@ -10,8 +10,11 @@ export const config: Phaser.Types.Core.GameConfig = {
 
 
     scale: {
+        mode: Phaser.Scale.FIT,
+        parent: 'phaser-example',
+        autoCenter: Phaser.Scale.CENTER_BOTH,
         width: 800,
-        height: 600,
+        height: 600
     },
 
     physics: {
@@ -25,4 +28,6 @@ export const config: Phaser.Types.Core.GameConfig = {
     backgroundColor: '#000000',
 };
 
+
 export const game = new Phaser.Game(config);
+
