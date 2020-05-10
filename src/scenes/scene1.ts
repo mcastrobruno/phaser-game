@@ -4,6 +4,8 @@ import { Platform } from '../objects/platform';
 import { Stars } from '../objects/stars';
 import * as PowerUp from '../objects/powerUp';
 import { ScoreManager } from '../coordinator/scoreManager';
+import { EventDispatcher } from '../events/eventDispatcher';
+import { EventType } from '../events/eventTypes';
 
 const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
     active: false,
@@ -31,7 +33,30 @@ export class Scene1 extends Phaser.Scene {
     private scoreManager: ScoreManager;
 
 
+    public OrientationChanged(orientation: string) {
+        if (orientation == "landscape") {
+            alert('OK SIR');
+
+        }
+        else {
+            alert('Stop doing shit');
+        }
+    }
+
+
+    private eventEmitter: EventDispatcher;
+
     public create() {
+        this.eventEmitter = EventDispatcher.getInstance();
+
+        this.eventEmitter.on(EventType.OrientationChanged, (data: any) => {
+            if (data == "portrait")
+                this.scene.pause();
+            else
+                this.scene.resume();
+        });
+
+
         this.createScenario();
         this.player = new GamePlayer(this);
         this.stars = new Stars(this.physics.world, this);
