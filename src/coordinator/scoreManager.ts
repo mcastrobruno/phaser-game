@@ -13,7 +13,7 @@ export class ScoreManager {
     private powerups: Phaser.Physics.Arcade.Group;
 
     private scoreText: Phaser.GameObjects.Text;
-    private score: number = 0;
+    public score: number = 0;
 
     private maskThreshold: number = 5;
     private handThreshold: number = 10;

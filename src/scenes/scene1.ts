@@ -7,6 +7,7 @@ import { ScoreManager } from '../coordinator/scoreManager';
 import { EventDispatcher } from '../events/eventDispatcher';
 import { EventType } from '../events/eventTypes';
 
+
 const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
     active: false,
     visible: false,
@@ -31,7 +32,7 @@ export class Scene1 extends Phaser.Scene {
     private bombs: Phaser.Physics.Arcade.Group;
     private powerups: Phaser.Physics.Arcade.Group;
     private scoreManager: ScoreManager;
-
+   
 
     public OrientationChanged(orientation: string) {
         if (orientation == "landscape") {
@@ -46,7 +47,15 @@ export class Scene1 extends Phaser.Scene {
 
     private eventEmitter: EventDispatcher;
 
+
+   
     public create() {
+
+
+       
+
+
+
 
         this.add.ellipse(500, 500, 120);
 
@@ -112,7 +121,7 @@ export class Scene1 extends Phaser.Scene {
             player.anims.play('turn');
             this.gameOver = true;
 
-            // this.scene.start('GameOver', this.score);
+            this.scene.start('GameOver', this.scoreManager.score);
         }
     }
 
