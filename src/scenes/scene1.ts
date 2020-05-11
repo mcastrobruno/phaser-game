@@ -4,6 +4,9 @@ import { Platform } from '../objects/platform';
 import { Stars } from '../objects/stars';
 import * as PowerUp from '../objects/powerUp';
 import { ScoreManager } from '../coordinator/scoreManager';
+import { EventDispatcher } from '../events/eventDispatcher';
+import { EventType } from '../events/eventTypes';
+
 
 const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
     active: false,
@@ -29,11 +32,46 @@ export class Scene1 extends Phaser.Scene {
     private bombs: Phaser.Physics.Arcade.Group;
     private powerups: Phaser.Physics.Arcade.Group;
     private scoreManager: ScoreManager;
+   
+
+    public OrientationChanged(orientation: string) {
+        if (orientation == "landscape") {
+            alert('OK SIR');
+
+        }
+        else {
+            alert('Stop doing shit');
+        }
+    }
 
 
+    private eventEmitter: EventDispatcher;
+
+
+   
     public create() {
 
-        this.checkOrientation(this.scale.orientation);
+
+       
+
+
+
+
+        this.add.ellipse(500, 500, 120);
+
+
+        this.eventEmitter = EventDispatcher.getInstance();
+
+        this.eventEmitter.on(EventType.OrientationChanged, (data: any) => {
+            if (data == "portrait") {
+                this.scene.pause();
+            }
+
+            else {
+                this.scene.resume();
+            }
+
+        });
 
 
         this.createScenario();
@@ -46,23 +84,7 @@ export class Scene1 extends Phaser.Scene {
         this.SetCollisions();
         this.addEnemy();
         this.scoreManager.Start();
-
-        this.scale.on('orientationchange', this.checkOrientation, this);
-
-
-        
-
     }
-
-    private checkOrientation(orientation) {
-        alert(orientation);
-        if (orientation == 'portrait-primary' || orientation == 'portrait') {
-            document.getElementById("turn").style.display = "block";
-        }
-        else
-            document.getElementById("turn").style.display = "none";
-    }
-
 
 
     private createScenario() {
@@ -93,24 +115,34 @@ export class Scene1 extends Phaser.Scene {
                 }
             }
 
+            this.scene.pause();
             this.physics.pause();
             player.setTint(0xff0000);
             player.anims.play('turn');
             this.gameOver = true;
 
-            // this.scene.start('GameOver', this.score);
+            this.scene.start('GameOver', this.scoreManager.score);
         }
     }
 
     private addEnemy() {
-        let x: number = Phaser.Math.Between(400, 800);
-        if (this.player != null)
-            x = (this.player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
 
-        var bomb = this.bombs.create(x, 16, 'covid');
-        bomb.setBounce(1);
-        bomb.setCollideWorldBounds(true);
-        bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+        var timer = this.time.addEvent({
+            delay: 10000,
+            callback: function () {
+                let x: number = Phaser.Math.Between(400, 800);
+                if (this.player != null)
+                    x = (this.player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
+
+                var bomb = this.bombs.create(x, 16, 'covid');
+                bomb.setBounce(1);
+                bomb.setCollideWorldBounds(true);
+                bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+
+            },
+            callbackScope: this,
+            loop: true
+        });
     }
 
     public update() {
