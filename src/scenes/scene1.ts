@@ -106,6 +106,7 @@ export class Scene1 extends Phaser.Scene {
                 }
             }
 
+            this.scene.pause();
             this.physics.pause();
             player.setTint(0xff0000);
             player.anims.play('turn');
@@ -116,14 +117,23 @@ export class Scene1 extends Phaser.Scene {
     }
 
     private addEnemy() {
-        let x: number = Phaser.Math.Between(400, 800);
-        if (this.player != null)
-            x = (this.player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
 
-        var bomb = this.bombs.create(x, 16, 'covid');
-        bomb.setBounce(1);
-        bomb.setCollideWorldBounds(true);
-        bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+        var timer = this.time.addEvent({
+            delay: 10000,
+            callback: function () {
+                let x: number = Phaser.Math.Between(400, 800);
+                if (this.player != null)
+                    x = (this.player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
+
+                var bomb = this.bombs.create(x, 16, 'covid');
+                bomb.setBounce(1);
+                bomb.setCollideWorldBounds(true);
+                bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+
+            },
+            callbackScope: this,
+            loop: true
+        });
     }
 
     public update() {
