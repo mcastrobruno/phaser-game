@@ -42,7 +42,8 @@ export class Scene1 extends Phaser.Scene {
 
     private eventEmitter: EventDispatcher;
 
-
+    private leftDown: boolean = false;
+    private rightDown: boolean = false;
 
     public create() {
 
@@ -79,20 +80,25 @@ export class Scene1 extends Phaser.Scene {
 
         var buttonLeft = this.add.image(60, this.game.scale.width - 260, 'buttonLeft')
             .setInteractive()
+            .on('pointerup', () => {
+                this.leftDown = false;
+            })
             .on('pointerdown', () => {
-                this.player.setVelocityX(- gameConfig.playerXSpeed);
-                this.player.anims.play('left', true);
+                this.leftDown = true;
             });
         var buttonRight = this.add.image(200, this.game.scale.width - 260, 'buttonRight')
             .setInteractive()
+            .on('pointerup', () => {
+                this.rightDown = false;
+            })
             .on('pointerdown', () => {
-                this.player.setVelocityX(gameConfig.playerXSpeed);
-                this.player.anims.play('right', true);
+                this.rightDown = true;
+                
             });
 
         var buttonUp = this.add.image(700, this.game.scale.width - 260, 'buttonUp')
             .setInteractive()
-            .on('pointerdown', () => {
+            .on('pointerup', () => {
                 this.player.setVelocityY(-gameConfig.playerYSpeed);
             });
 
@@ -164,12 +170,12 @@ export class Scene1 extends Phaser.Scene {
     public update() {
         const cursorKeys = this.input.keyboard.createCursorKeys();
 
-        if (cursorKeys.left.isDown) {
+        if (cursorKeys.left.isDown || this.leftDown) {
             this.player.setVelocityX(- gameConfig.playerXSpeed);
 
             this.player.anims.play('left', true);
         }
-        else if (cursorKeys.right.isDown) {
+        else if (cursorKeys.right.isDown || this.rightDown) {
             this.player.setVelocityX(gameConfig.playerXSpeed);
 
             this.player.anims.play('right', true);
