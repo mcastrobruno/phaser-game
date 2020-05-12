@@ -93,13 +93,14 @@ export class Scene1 extends Phaser.Scene {
             })
             .on('pointerdown', () => {
                 this.rightDown = true;
-                
+
             });
 
         var buttonUp = this.add.image(700, this.game.scale.width - 260, 'buttonUp')
             .setInteractive()
             .on('pointerup', () => {
-                this.player.setVelocityY(-gameConfig.playerYSpeed);
+                if (this.player.body.touching.down)
+                    this.player.setVelocityY(-gameConfig.playerYSpeed);
             });
 
 
