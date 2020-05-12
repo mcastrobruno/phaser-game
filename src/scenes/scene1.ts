@@ -78,10 +78,12 @@ export class Scene1 extends Phaser.Scene {
         this.SetCollisions();
         this.addEnemy();
 
+        this.add.text(this.game.scale.width - 200, 0, 'Inner Width: ' + window.innerWidth.toString());
+        this.add.text(this.game.scale.width - 200, 20, 'Inner Height: ' + window.innerHeight.toString());
 
         var buttonLeft = this.add.image(60, this.game.scale.width - 260, 'buttonLeft')
             .setInteractive()
-            .on('pointerup', async() => {
+            .on('pointerup', async () => {
                 this.leftDown = false;
             })
             .on('pointerdown', async () => {
@@ -94,7 +96,7 @@ export class Scene1 extends Phaser.Scene {
             .on('pointerup', async () => {
                 this.rightDown = false;
             })
-            .on('pointerdown',async () => {
+            .on('pointerdown', async () => {
                 this.leftDown = false;
                 this.rightDown = true;
             });
