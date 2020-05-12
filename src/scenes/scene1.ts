@@ -85,6 +85,7 @@ export class Scene1 extends Phaser.Scene {
                 this.leftDown = false;
             })
             .on('pointerdown', () => {
+                this.rightDown = false;
                 this.leftDown = true;
             });
         var buttonRight = this.add.image(200, this.game.scale.width - 260, 'buttonRight')
@@ -93,6 +94,7 @@ export class Scene1 extends Phaser.Scene {
                 this.rightDown = false;
             })
             .on('pointerdown', () => {
+                this.leftDown = false;
                 this.rightDown = true;
 
             });
