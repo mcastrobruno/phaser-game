@@ -24,6 +24,12 @@ export class GameOver extends Phaser.Scene {
         this.add.text(screenCenterX, screenCenterY, 'GAME OVER', { fontFamily: 'test', fontSize: 90 }).setOrigin(0.5);
         this.add.text(screenCenterX, screenCenterY + 70, "Score: " + this.score, { fontSize: 30 }).setOrigin(0.5);
 
+        this.add.text(screenCenterX, screenCenterY + 150, "PLAY AGAIN", { fontFamily: 'test', fontSize: 30 })
+            .setOrigin(0.5)
+            .setInteractive()
+            .on('pointerdown', () => {
+                this.scene.start('Game');
+            });
         // this.ShowForm();
     }
 
