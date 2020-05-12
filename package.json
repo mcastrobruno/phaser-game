@@ -16,7 +16,7 @@
   },
   "scripts": { 
     "build": "webpack", 
-    "dev": "webpack-dev-server" 
+    "dev": "webpack-dev-server --host 0.0.0.0" 
   },
   "dependencies": {
     "phaser": "^3.23.0"

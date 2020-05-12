@@ -81,30 +81,30 @@ export class Scene1 extends Phaser.Scene {
 
         var buttonLeft = this.add.image(60, this.game.scale.width - 260, 'buttonLeft')
             .setInteractive()
-            .on('pointerup', () => {
+            .on('pointerup', async() => {
                 this.leftDown = false;
             })
-            .on('pointerdown', () => {
+            .on('pointerdown', async () => {
                 this.rightDown = false;
                 this.leftDown = true;
             });
+
         var buttonRight = this.add.image(200, this.game.scale.width - 260, 'buttonRight')
             .setInteractive()
-            .on('pointerup', () => {
+            .on('pointerup', async () => {
                 this.rightDown = false;
             })
-            .on('pointerdown', () => {
+            .on('pointerdown',async () => {
                 this.leftDown = false;
                 this.rightDown = true;
-
             });
 
         var buttonUp = this.add.image(700, this.game.scale.width - 260, 'buttonUp')
             .setInteractive()
-            .on('pointerup', () => {
+            .on('pointerup', async () => {
                 this.upDown = false;
             })
-            .on('pointerdown', () => {
+            .on('pointerdown', async () => {
                 this.upDown = true;
             });
 

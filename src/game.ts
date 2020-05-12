@@ -27,6 +27,9 @@ export const config: Phaser.Types.Core.GameConfig = {
             debug: false,
         },
     },
+    input: {
+        activePointers: 3
+    },
 
     backgroundColor: '#000000',
 };
