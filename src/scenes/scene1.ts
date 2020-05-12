@@ -78,9 +78,9 @@ export class Scene1 extends Phaser.Scene {
 
 
         var joystick = this.add.group();
-        joystick.create(60, this.game.scale.width-250, 'buttonLeft');
-        joystick.create(140, this.game.scale.width-250, 'buttonRight');
-        joystick.create(700, this.game.scale.width-250, 'buttonUp');
+        joystick.create(60, this.game.scale.width-260, 'buttonLeft');
+        joystick.create(200, this.game.scale.width-260, 'buttonRight');
+        joystick.create(700, this.game.scale.width-260, 'buttonUp');
 
 
         this.scoreManager.Start();
