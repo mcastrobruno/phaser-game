@@ -47,7 +47,7 @@ export class Scene1 extends Phaser.Scene {
     public create() {
 
 
-        
+
 
         this.add.ellipse(500, 500, 120);
 
@@ -77,10 +77,26 @@ export class Scene1 extends Phaser.Scene {
         this.addEnemy();
 
 
-        var joystick = this.add.group();
-        joystick.create(60, this.game.scale.width-260, 'buttonLeft');
-        joystick.create(200, this.game.scale.width-260, 'buttonRight');
-        joystick.create(700, this.game.scale.width-260, 'buttonUp');
+        var buttonLeft = this.add.image(60, this.game.scale.width - 260, 'buttonLeft')
+            .setInteractive()
+            .on('pointerdown', () => {
+                this.player.setVelocityX(- gameConfig.playerXSpeed);
+                this.player.anims.play('left', true);
+            });
+        var buttonRight = this.add.image(200, this.game.scale.width - 260, 'buttonRight')
+            .setInteractive()
+            .on('pointerdown', () => {
+                this.player.setVelocityX(gameConfig.playerXSpeed);
+                this.player.anims.play('right', true);
+            });
+
+        var buttonUp = this.add.image(700, this.game.scale.width - 260, 'buttonUp')
+            .setInteractive()
+            .on('pointerdown', () => {
+                this.player.setVelocityY(-gameConfig.playerYSpeed);
+            });
+
+
 
 
         this.scoreManager.Start();
