@@ -190,7 +190,7 @@ export class Scene1 extends Phaser.Scene {
             this.player.anims.play('turn');
         }
 
-        if (cursorKeys.up.isDown && this.player.body.touching.down) {
+        if ((cursorKeys.up.isDown || this.upDown) && this.player.body.touching.down) {
             this.player.setVelocityY(-gameConfig.playerYSpeed);
         }
     }
