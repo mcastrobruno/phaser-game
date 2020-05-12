@@ -32,6 +32,9 @@ export class Menu extends Phaser.Scene {
         this.load.image('covid', 'assets/images/covid.png');
         this.load.image('facemask', 'assets/images/facemask.png');
         this.load.image('handsanitizer', 'assets/images/hand_sanitizer.png');
+        this.load.image('buttonLeft', 'assets/images/button_left_64.png');
+        this.load.image('buttonRight', 'assets/images/button_right_64.png');
+        this.load.image('buttonUp', 'assets/images/button_up_64.png');
 
         this.load.spritesheet('dude',
             'assets/images/dude.png',

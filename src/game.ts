@@ -39,15 +39,5 @@ var emitter = EventDispatcher.getInstance();
 
 window.addEventListener('orientationchange', (orientation) => {
 
-    console.log('Height: ' + window.innerHeight + ' Width:' + window.innerWidth);
-
-    if (window.innerHeight < window.innerWidth) {
-        document.getElementById("turn").style.display = "block";
-        emitter.emit(EventType.OrientationChanged, 'portrait');
-    }
-    else {
-        document.getElementById("turn").style.display = "none";
-        emitter.emit(EventType.OrientationChanged, 'landscape');
-    }
 });
 

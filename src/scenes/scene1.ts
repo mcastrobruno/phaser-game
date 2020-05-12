@@ -32,30 +32,22 @@ export class Scene1 extends Phaser.Scene {
     private bombs: Phaser.Physics.Arcade.Group;
     private powerups: Phaser.Physics.Arcade.Group;
     private scoreManager: ScoreManager;
-   
 
+
+    //TODO: Fix Orientation Issue
     public OrientationChanged(orientation: string) {
-        if (orientation == "landscape") {
-            alert('OK SIR');
 
-        }
-        else {
-            alert('Stop doing shit');
-        }
     }
 
 
     private eventEmitter: EventDispatcher;
 
 
-   
+
     public create() {
 
 
-       
-
-
-
+        
 
         this.add.ellipse(500, 500, 120);
 
@@ -83,6 +75,14 @@ export class Scene1 extends Phaser.Scene {
 
         this.SetCollisions();
         this.addEnemy();
+
+
+        var joystick = this.add.group();
+        joystick.create(60, this.game.scale.width-250, 'buttonLeft');
+        joystick.create(140, this.game.scale.width-250, 'buttonRight');
+        joystick.create(700, this.game.scale.width-250, 'buttonUp');
+
+
         this.scoreManager.Start();
     }
 
