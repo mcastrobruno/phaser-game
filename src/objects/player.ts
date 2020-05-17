@@ -1,5 +1,6 @@
 import * as Phaser from 'phaser';
 import { PowerUp } from '../objects/powerUp';
+import { GridScene } from '../scenes/GridScene';
 
 
 export class GamePlayer extends Phaser.Physics.Arcade.Sprite {
@@ -10,11 +11,16 @@ export class GamePlayer extends Phaser.Physics.Arcade.Sprite {
 
     private countBuffer: boolean = false;
 
-    constructor(scene: Phaser.Scene) {
-        super(scene, 100, 450, 'dude')
+    constructor(scene: GridScene) {
+        super(scene, 0, 0, 'dude')
 
         scene.add.existing(this);
+
+        scene.alignGrid.placeAtIndex(45, this);
         scene.physics.add.existing(this);
+
+
+
         this.setBounce(0.2);
         this.setCollideWorldBounds(true);
         this.buildAnimation();

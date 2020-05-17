@@ -1,9 +1,8 @@
-import { game } from '../game'
+import { game } from '../game';
 
 export class AlignGrid {
 
     private config: any;
-    private game: any;
     private scene: any;
     private ch: any;
     private cw: any;
@@ -48,14 +47,17 @@ export class AlignGrid {
         }
         this.graphics.strokePath();
     }
-    placeAt(xx, yy, obj) {
+    placeAt(xx, yy, obj: Phaser.Physics.Arcade.Sprite | Phaser.GameObjects.Sprite) {
         //calc position based upon the cellwidth and cellheight
-        var x2 = this.cw * xx + this.cw / 2;
+        var x2: number = this.cw * xx + this.cw / 2;
         var y2 = this.ch * yy + this.ch / 2;
-        obj.x = x2;
-        obj.y = y2;
+        obj.setX(x2);
+        obj.setY(y2);
+
+        obj.updateDisplayOrigin();  
+        obj.update();
     }
-    placeAtIndex(index, obj) {
+    placeAtIndex(index, obj: Phaser.Physics.Arcade.Sprite | Phaser.GameObjects.Sprite) {
         var yy = Math.floor(index / this.config.cols);
         var xx = index - (yy * this.config.cols);
         this.placeAt(xx, yy, obj);

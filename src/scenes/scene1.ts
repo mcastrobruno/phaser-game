@@ -6,6 +6,9 @@ import * as PowerUp from '../objects/powerUp';
 import { ScoreManager } from '../coordinator/scoreManager';
 import { EventDispatcher } from '../events/eventDispatcher';
 import { EventType } from '../events/eventTypes';
+import { AlignGrid } from '../form/alignGrid';
+import { GridScene } from './GridScene';
+import { Align } from '../form/align';
 
 
 const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
@@ -20,25 +23,22 @@ const gameConfig = {
     numberOfAids: 5
 }
 
-export class Scene1 extends Phaser.Scene {
+
+
+
+export class Scene1 extends GridScene {
+    brickGroup: Phaser.Physics.Arcade.Group;
 
     constructor() {
         super(sceneConfig);
     }
 
-    private player: GamePlayer;
+    // private player: GamePlayer;
     private platforms: Phaser.Physics.Arcade.StaticGroup;
     private stars: Phaser.Physics.Arcade.Group;
     private bombs: Phaser.Physics.Arcade.Group;
     private powerups: Phaser.Physics.Arcade.Group;
     private scoreManager: ScoreManager;
-
-
-    //TODO: Fix Orientation Issue
-    public OrientationChanged(orientation: string) {
-
-    }
-
 
     private eventEmitter: EventDispatcher;
 
@@ -46,41 +46,68 @@ export class Scene1 extends Phaser.Scene {
     private rightDown: boolean = false;
     private upDown: boolean = false;
 
+    private resize() {
+        var canvas = this.game.canvas, width = window.innerWidth, height = window.innerHeight;
+        var wratio = width / height, ratio = canvas.width / canvas.height;
+
+        if (wratio < ratio) {
+            canvas.style.width = width + "px";
+            canvas.style.height = (width / ratio) + "px";
+        } else {
+            canvas.style.width = (height * ratio) + "px";
+            canvas.style.height = height + "px";
+        }
+    }
+
+
+    private player: Phaser.Physics.Arcade.Sprite;
+    private grid: AlignGrid;
+
+    public preload() {
+        this.load.image('block', 'assets/images/block_resized.png');
+
+        this.buildAnimation();
+    }
     public create() {
 
+        this.brickGroup = this.physics.add.group();
+
+        this.player = this.physics.add.sprite(0, 0, "dude");
 
 
 
-        this.add.ellipse(500, 500, 120);
+        this.grid = new AlignGrid({ scene: this, rows: 11, cols: 11 });
+        this.grid.showNumbers();
 
 
-        this.eventEmitter = EventDispatcher.getInstance();
+        this.grid.placeAtIndex(81, this.player);
+        this.makeFloor(110, 120, 'block', 0.2);
+        this.makeFloor(55, 58, 'block', 0.1);
+        this.makeFloor(85, 87, 'block', 0.1);
+        this.makeFloor(30, 32, 'block', 0.1);
+        this.makeFloor(0, 3, 'block', 0.1);
 
-        this.eventEmitter.on(EventType.OrientationChanged, (data: any) => {
-            if (data == "portrait") {
-                this.scene.pause();
-            }
+        this.player.setGravityY(300);
+        this.physics.add.collider(this.player, this.brickGroup)
+    }
 
-            else {
-                this.scene.resume();
-            }
+    private makeFloor(fromPosition, toPosition, key, scale?) {
+        for (var i = fromPosition; i < toPosition + 1; i++) {
+            this.placeBlock(i, key, scale);
+        }
+    }
 
-        });
+    private placeBlock(pos, key, scale?) {
+        let block = this.physics.add.sprite(0, 0, key);
+        this.grid.placeAtIndex(pos, block);
+        this.brickGroup.add(block);
+        if (scale)
+            Align.scaleToGameW(block, scale);
+        block.setImmovable();
+    }
 
 
-        this.createScenario();
-        this.player = new GamePlayer(this);
-        this.stars = new Stars(this.physics.world, this);
-        this.bombs = this.physics.add.group();
-        this.powerups = this.physics.add.group();
-        this.scoreManager = new ScoreManager(this, this.player, this.stars, this.powerups);
-
-        this.SetCollisions();
-        this.addEnemy();
-
-        this.add.text(this.game.scale.width - 200, 0, 'Inner Width: ' + window.innerWidth.toString());
-        this.add.text(this.game.scale.width - 200, 20, 'Inner Height: ' + window.innerHeight.toString());
-
+    private makeController() {
         var buttonLeft = this.add.image(60, this.game.scale.width - 260, 'buttonLeft')
             .setInteractive()
             .on('pointerup', async () => {
@@ -90,7 +117,6 @@ export class Scene1 extends Phaser.Scene {
                 this.rightDown = false;
                 this.leftDown = true;
             });
-
         var buttonRight = this.add.image(200, this.game.scale.width - 260, 'buttonRight')
             .setInteractive()
             .on('pointerup', async () => {
@@ -100,7 +126,6 @@ export class Scene1 extends Phaser.Scene {
                 this.leftDown = false;
                 this.rightDown = true;
             });
-
         var buttonUp = this.add.image(700, this.game.scale.width - 260, 'buttonUp')
             .setInteractive()
             .on('pointerup', async () => {
@@ -109,16 +134,10 @@ export class Scene1 extends Phaser.Scene {
             .on('pointerdown', async () => {
                 this.upDown = true;
             });
-
-
-
-
-        this.scoreManager.Start();
     }
 
-
     private createScenario() {
-        this.add.image(400, 300, 'sky');
+        // this.add.image(400, 300, 'sky');
         this.platforms = new Platform(this.physics.world, this);
     }
 
@@ -153,6 +172,27 @@ export class Scene1 extends Phaser.Scene {
 
             this.scene.start('GameOver', this.scoreManager.score);
         }
+    }
+
+
+    private buildAnimation() {
+        this.anims.create({
+            key: 'left',
+            frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
+            frameRate: 10,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'turn',
+            frames: [{ key: 'dude', frame: 4 }],
+            frameRate: 20
+        });
+        this.anims.create({
+            key: 'right',
+            frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
+            frameRate: 10,
+            repeat: -1
+        });
     }
 
     private addEnemy() {
